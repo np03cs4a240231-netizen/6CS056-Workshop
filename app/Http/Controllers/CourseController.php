@@ -26,7 +26,7 @@ class CourseController extends Controller
 
         return redirect()
             ->route('courses.index')
-            ->with('success', "Course {$course->name} created successfully!");
+            ->with('success', "Course {$course->title} created successfully!");
     }
 
     public function show(Course $course)
@@ -45,7 +45,7 @@ class CourseController extends Controller
 
     public function update(Request $request, Course $course)
     {
-        $course->update($request->validate($this->rules()));
+        $course->update($request->validate($this->rules($course)));
 
         return redirect()
             ->route('courses.show', $course)
@@ -61,15 +61,18 @@ class CourseController extends Controller
             ->with('success', 'Course deleted successfully!');
     }
 
-    private function rules(): array
+    private function rules(?Course $course = null): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'code' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('courses')->ignore($course?->id),
+            ],
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'duration' => 'required|integer|min:1',
-            'fee' => 'required|numeric|min:0',
-            'difficulty' => ['required', Rule::in(['Easy', 'Medium', 'Hard'])],
-            'is_active' => 'boolean',
+            'credits' => 'required|integer|min:1|max:20',
         ];
     }
 }
