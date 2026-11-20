@@ -1,46 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Course</title>
-</head>
-<body>
-    <h1>Add Course</h1>
+<x-layouts.app title="Course Details">
+    <h1>Course Details</h1>
 
-    @if ($errors->any())
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
+    <p><strong>ID:</strong> {{ $course->id }}</p>
+    <p><strong>Name:</strong> {{ $course->name }}</p>
+    <p><strong>Description:</strong> {{ $course->description }}</p>
+    <p><strong>Duration:</strong> {{ $course->duration }} weeks</p>
+    <p><strong>Fee:</strong> {{ number_format($course->fee, 2) }}</p>
+    <p><strong>Difficulty:</strong> {{ $course->difficulty }}</p>
+    <p><strong>Active:</strong> {{ $course->is_active ? 'Yes' : 'No' }}</p>
 
-    <form action="{{ route('course.store') }}" method="POST">
-        @csrf
-
-        <div>
-            <label for="code">Course Code:</label>
-            <input type="text" id="code" name="code" value="{{ old('code') }}" required>
-        </div>
-
-        <div>
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" value="{{ old('title') }}" required>
-        </div>
-
-        <div>
-            <label for="description">Description:</label>
-            <textarea id="description" name="description">{{ old('description') }}</textarea>
-        </div>
-
-        <div>
-            <label for="credits">Credits:</label>
-            <input type="number" id="credits" name="credits" value="{{ old('credits', 3) }}" required>
-        </div>
-
-        <button type="submit">Save Course</button>
-        <a href="{{ route('course.list') }}">Back to List</a>
-    </form>
-</body>
-</html>
+    <a href="{{ route('courses.edit', $course) }}" class="btn">Edit Course</a>
+    <a href="{{ route('courses.index') }}">Back to Courses</a>
+</x-layouts.app>
